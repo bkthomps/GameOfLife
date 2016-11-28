@@ -1,23 +1,24 @@
 /**
- * **********************************************************************************************************************************
+ ***********************************************************************************************************************
  * Bailey Thompson
- * Game Of Life (1.1)
- * 16 September 2016
+ * Game Of Life (1.1.1)
+ * 27 November 2016
  * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
  * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
  * Game Rules: Any live cell with more than three live neighbours dies, as if by over-population.
  * Game Rules: Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
- * Features: User has ability to pause and resume the game at any time. At any time, user can click on the game board, and the cell
- * Features: will become the opposite of what it currently is. If it was dead, it will become alive, if it was alive, it will
- * Features: become dead. Change in cell state will have effect on game logic like any normal cell would. User has the ability to
- * Features: clear the game board at any time, making all cells dead. User has the ability to randomize the amount of live cells,
- * Features: portion of live cells that should appear on the board. User has the ability to change the amount of time between
- * Features: turns, having an immediate effect on game logic. User also has the ability to change row size and column size at any
- * Features: time. If a selection pane other than the main game is closed, the pane acts as if the user did not enter anything,
- * Features: by entering the value that the user previously put. All user preferences are saved with file io so that the next time
- * Features: the user opens the game, previous settings are used. The main game frame cannot be resized by sketching the screen,
+ * Features: User  has  the  ability  to  pause and resume the game at any time. At any time, user can click on the game
+ * Features: board, and the cell will become the opposite of what it currently is. If it was dead, it will become alive,
+ * Features: if  it  was  alive,  it  will  become dead. Change in cell state will have an effect on game logic like any
+ * Features: normal  cell  would.  User has the ability to clear the game board at any time, making all cells dead. User
+ * Features: has  the  ability  to  randomize  the amount of live cells, portion of live cells that should appear on the
+ * Features: board.  User has the ability to change the amount of time between turns, having an immediate effect on game
+ * Features: logic.  User also has the ability to change row size and column size at any time. If a selection pane other
+ * Features: than  the  main  game is closed, the pane acts as if the user did not enter anything, by entering the value
+ * Features: that  the  user  previously put. All user preferences are saved with file IO so that the next time the user
+ * Features: opens  the game, previous settings are used. The main game frame cannot be resized by sketching the screen,
  * Features: unless amount of rows or columns in being changed
- ***********************************************************************************************************************************
+ ***********************************************************************************************************************
  */
 //declaring package
 package gameoflife;
@@ -57,21 +58,17 @@ public class GameOfLife {
 
     //declaring name of path file
     Path file = Paths.get("GameOfLife.txt");
-    //declaring String variables for the displayed board of the main game frame, the temporary user input variable, and for what is saved with file io
-    String lifeBoard, tempSize = "", saveFile;
-    //declaring String array used for file io
-    String[] split;
-    //variables for what the user can choose from various settings
-    int maxVertical, maxHorizontal, screenWidth, screenHeight, roundTime, randomSpawning, timeCounter;
-    //declaring cells, both the displayed ones, and the temporary ones that are written over to displayed ones after a full turn
-    boolean[][] cells, tempCells;
     //declaring various variables for GUI
     private JFrame frame;
     private JPanel middlePanel, bottomPanel;
     private JLabel label;
     private JButton btnPause, btnPlay, btnRandom, btnClear, btnTime, btnColumn, btnRow, btnExit;
-    //boolean variables for when user pauses game, when the label is being clicked on, and when the label is being edited
+    //variables used for game logic
+    String lifeBoard, tempSize = "", saveFile;
+    String[] split;
     boolean pause, editPress, changingLabel;
+    boolean[][] cells, tempCells;
+    int maxVertical, maxHorizontal, screenWidth, screenHeight, roundTime, randomSpawning, timeCounter;
 
     //declaring main method
     public static void main(String[] args) {
@@ -90,7 +87,9 @@ public class GameOfLife {
         //if the monitor cannot display the minimum amount of columns and rows for the game to run, the user is notified
         if (((screenWidth - 10) / 14 - 1) < 25 || ((screenHeight - 70) / 16 - 1) < 25) {
             String[] buttonGameMode = {"Ok"};
-            JOptionPane.showOptionDialog(null, "Sorry, your screen size is too small for this program to run.", "Game Of Life", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, buttonGameMode, buttonGameMode[0]);
+            JOptionPane.showOptionDialog(null, "Sorry, your screen size is too small for this program to run.",
+                    "Game Of Life", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, buttonGameMode,
+                    buttonGameMode[0]);
             System.exit(0);
         }
         //method Load is initialized
@@ -107,7 +106,8 @@ public class GameOfLife {
         while (1 != 0) {
             //checking if pause is false
             if (pause == false) {
-                //preventing automatic editing of label if it is being changed from a mouse click; until editPress is set to false again, the code is basically paused
+                //preventing automatic editing of label if it is being changed from a mouse click; 
+                //until editPress is set to false again, the code is basically paused
                 while (editPress == true) {
                     try {
                         Thread.sleep(1);
@@ -117,8 +117,9 @@ public class GameOfLife {
                 }
                 //sending to method FillingAndChangingArray
                 FillingAndChangingArray();
-                //instead of using the sleep amount for the round time that the user enters, a 1 milisecond sleep thread is set the amount of times that the user specifies with round time,
-                //the sleep is only executed if pause is false, this is so that if pause becomes true, it stops and does not continue sleeping
+                //instead of using the sleep amount for the round time that the user enters, a 1 milisecond sleep thread
+                //is set the amount of times that the user specifies with round time, the sleep is only executed if 
+                //pause is false, this is so that if pause becomes true, it stops and does not continue sleeping
                 for (timeCounter = 0; timeCounter < roundTime; timeCounter++) {
                     if (pause == false) {
                         try {
@@ -151,7 +152,8 @@ public class GameOfLife {
                 //sets the temp number to 0
                 int temp = 0;
                 //checks all 8 neighbours if it is not a side or corner cell
-                if (vertical - 1 >= 0 && horizontal - 1 >= 0 && vertical + 1 <= maxVertical && horizontal + 1 <= maxHorizontal) {
+                if (vertical - 1 >= 0 && horizontal - 1 >= 0 && vertical + 1 <= maxVertical
+                        && horizontal + 1 <= maxHorizontal) {
                     if (cells[vertical - 1][horizontal - 1] == true) {
                         temp += 1;
                     }
@@ -177,7 +179,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
-                } else if (vertical - 1 < 0 && vertical + 1 <= maxVertical && horizontal - 1 >= 0 && horizontal + 1 <= maxHorizontal) {
+                } else if (vertical - 1 < 0 && vertical + 1 <= maxVertical && horizontal - 1 >= 0
+                        && horizontal + 1 <= maxHorizontal) {
                     if (cells[vertical][horizontal - 1] == true) {
                         temp += 1;
                     }
@@ -194,7 +197,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
-                } else if (vertical + 1 > maxVertical && vertical - 1 >= 0 && horizontal - 1 >= 0 && horizontal + 1 <= maxHorizontal) {
+                } else if (vertical + 1 > maxVertical && vertical - 1 >= 0 && horizontal - 1 >= 0
+                        && horizontal + 1 <= maxHorizontal) {
                     if (cells[vertical - 1][horizontal - 1] == true) {
                         temp += 1;
                     }
@@ -211,7 +215,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
-                } else if (horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal && vertical - 1 >= 0 && vertical + 1 <= maxVertical) {
+                } else if (horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal && vertical - 1 >= 0
+                        && vertical + 1 <= maxVertical) {
                     if (cells[vertical - 1][horizontal] == true) {
                         temp += 1;
                     }
@@ -228,7 +233,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
-                } else if (horizontal + 1 > maxHorizontal && horizontal - 1 >= 0 && vertical - 1 >= 0 && vertical + 1 <= maxVertical) {
+                } else if (horizontal + 1 > maxHorizontal && horizontal - 1 >= 0 && vertical - 1 >= 0
+                        && vertical + 1 <= maxVertical) {
                     if (cells[vertical - 1][horizontal - 1] == true) {
                         temp += 1;
                     }
@@ -245,7 +251,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
-                } else if (vertical - 1 < 0 && horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal && vertical + 1 <= maxVertical) {
+                } else if (vertical - 1 < 0 && horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal
+                        && vertical + 1 <= maxVertical) {
                     if (cells[vertical][horizontal + 1] == true) {
                         temp += 1;
                     }
@@ -256,7 +263,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
-                } else if (vertical - 1 < 0 && horizontal + 1 > maxHorizontal && horizontal - 1 >= 0 && vertical + 1 <= maxVertical) {
+                } else if (vertical - 1 < 0 && horizontal + 1 > maxHorizontal && horizontal - 1 >= 0
+                        && vertical + 1 <= maxVertical) {
                     if (cells[vertical][horizontal - 1] == true) {
                         temp += 1;
                     }
@@ -267,7 +275,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
-                } else if (vertical + 1 > maxVertical && horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal && vertical - 1 >= 0) {
+                } else if (vertical + 1 > maxVertical && horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal
+                        && vertical - 1 >= 0) {
                     if (cells[vertical - 1][horizontal] == true) {
                         temp += 1;
                     }
@@ -278,7 +287,8 @@ public class GameOfLife {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
-                } else if (vertical + 1 > maxVertical && horizontal + 1 > maxHorizontal && horizontal - 1 >= 0 && vertical - 1 >= 0) {
+                } else if (vertical + 1 > maxVertical && horizontal + 1 > maxHorizontal && horizontal - 1 >= 0
+                        && vertical - 1 >= 0) {
                     if (cells[vertical - 1][horizontal - 1] == true) {
                         temp += 1;
                     }
@@ -289,13 +299,16 @@ public class GameOfLife {
                         temp += 1;
                     }
                 }
-                //if the cells at the position is alive and has more than 3 neighbours or less than 2, it dies but is temporairly stored on tempCells
+                //if the cells at the position is alive and has more than 3 neighbours or less than 2, 
+                //it dies but is temporairly stored on tempCells
                 if (cells[vertical][horizontal] == true && (temp < 2 || temp > 3)) {
                     tempCells[vertical][horizontal] = false;
-                    //if the cells at the position is dead but has 3 neighbours, it becomes alive but is temporairly stored on tempCells
+                    //if the cells at the position is dead but has 3 neighbours, 
+                    //it becomes alive but is temporairly stored on tempCells
                 } else if (cells[vertical][horizontal] == false && temp == 3) {
                     tempCells[vertical][horizontal] = true;
-                    //if the cells at the position is alive and has 2 or 3 neighbours, it stays alive, and is temporairly stored on tempCells
+                    //if the cells at the position is alive and has 2 or 3 neighbours, 
+                    //it stays alive, and is temporairly stored on tempCells
                 } else if (cells[vertical][horizontal] == true && (temp == 2 || temp == 3)) {
                     tempCells[vertical][horizontal] = true;
                 }
@@ -453,13 +466,15 @@ public class GameOfLife {
             boolean skip = false;
             //the loop is executed and re-executed until conditions are met
             do {
-                tempSize = JOptionPane.showInputDialog(null, "How much of the time out of 100 should a cell spawn alive, as an integer value?", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
+                tempSize = JOptionPane.showInputDialog(null, "How much of the time out of 100 should a cell spawn "
+                        + "alive, as an integer value?", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
                 //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
                     tempSize = String.valueOf(randomSpawning);
                     skip = true;
                 }
-            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", "")) || tempSize.length() > 9 || parseInt(tempSize, 10) > 100);
+            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
+                    || tempSize.length() > 9 || parseInt(tempSize, 10) > 100);
             if (skip == false) {
                 //randomSpawning variable is set
                 randomSpawning = parseInt(tempSize, 10);
@@ -484,12 +499,14 @@ public class GameOfLife {
             frame.setTitle("Game Of Life (Paused)");
             //the loop is executed and re-executed until conditions are met
             do {
-                tempSize = JOptionPane.showInputDialog(null, "Please insert the amount of miliseconds\nper turn as an integer value.\n1000 miliseconds = 1 second.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
+                tempSize = JOptionPane.showInputDialog(null, "Please insert the amount of miliseconds\nper turn as an "
+                        + "integer value.\n1000 miliseconds = 1 second.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
                 //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
                     tempSize = String.valueOf(roundTime);
                 }
-            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", "")) || tempSize.length() > 9 || parseInt(tempSize, 10) == 0);
+            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
+                    || tempSize.length() > 9 || parseInt(tempSize, 10) == 0);
             //roundTime variable is set
             roundTime = parseInt(tempSize, 10);
             //sending to the method Save
@@ -507,12 +524,16 @@ public class GameOfLife {
             frame.setVisible(false);
             //the loop is executed and re-executed until conditions are met
             do {
-                tempSize = JOptionPane.showInputDialog(null, "Please insert the column size as an integer value.\nMust be between 25 and maximum size allowed on your monitor.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
+                tempSize = JOptionPane.showInputDialog(null, "Please insert the column size as an integer value.\nMust "
+                        + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
+                        JOptionPane.PLAIN_MESSAGE);
                 //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
                     tempSize = String.valueOf(maxVertical + 1);
                 }
-            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", "")) || tempSize.length() > 9 || parseInt(tempSize, 10) < 25 || parseInt(tempSize, 10) > (screenHeight - 95) / 16 - 1);
+            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
+                    || tempSize.length() > 9 || parseInt(tempSize, 10) < 25
+                    || parseInt(tempSize, 10) > (screenHeight - 95) / 16 - 1);
             //maxVertical variable is set
             maxVertical = parseInt(tempSize, 10) - 1;
             //sending to method Resize
@@ -524,12 +545,16 @@ public class GameOfLife {
             frame.setVisible(false);
             //the loop is executed and re-executed until conditions are met
             do {
-                tempSize = JOptionPane.showInputDialog(null, "Please insert the row size as an integer value.\nMust be between 25 and maximum size allowed on your monitor.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
+                tempSize = JOptionPane.showInputDialog(null, "Please insert the row size as an integer value.\nMust "
+                        + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
+                        JOptionPane.PLAIN_MESSAGE);
                 //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
                     tempSize = String.valueOf(maxHorizontal + 1);
                 }
-            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", "")) || tempSize.length() > 9 || parseInt(tempSize, 10) < 25 || parseInt(tempSize, 10) > (screenWidth - 5) / 14 - 1);
+            } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
+                    || tempSize.length() > 9 || parseInt(tempSize, 10) < 25
+                    || parseInt(tempSize, 10) > (screenWidth - 5) / 14 - 1);
             //maxHorizontal variable is set
             maxHorizontal = parseInt(tempSize, 10) - 1;
             //sending to method Resize
@@ -570,11 +595,13 @@ public class GameOfLife {
                 if (randomSpawning != 0) {
                     //random number generator
                     randomRandomSpawns = (int) (Math.random() * 100);
-                    //if the randomly generated number is greater or equal to 0 and less than the randomSpawning variable, both 2d arrays are set to true at that position
+                    //if the randomly generated number is greater or equal to 0 and less than the randomSpawning 
+                    //variable, both 2d arrays are set to true at that position
                     if (randomRandomSpawns >= 0 && randomRandomSpawns < randomSpawning) {
                         cells[vertical][horizontal] = true;
                         tempCells[vertical][horizontal] = true;
-                        //if the randomly generated number is equal to or greater than the randomSpawning variable, both 2d arrays are set to false at that position
+                        //if the randomly generated number is equal to or greater than the randomSpawning variable, 
+                        //both 2d arrays are set to false at that position
                     } else {
                         cells[vertical][horizontal] = false;
                         tempCells[vertical][horizontal] = false;
