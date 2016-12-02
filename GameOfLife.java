@@ -1,7 +1,7 @@
 /**
  ***********************************************************************************************************************
  * Bailey Thompson
- * Game Of Life (1.1.2)
+ * Game Of Life (1.1.3)
  * 2 December 2016
  * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
  * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
@@ -105,7 +105,7 @@ public class GameOfLife {
         PrepareGUI();
         while (1 != 0) {
             //checking if pause is false
-            if (pause == false) {
+            if (!pause) {
                 //preventing automatic editing of label if it is being changed from a mouse click; 
                 //until editPress is set to false again, the code is basically paused
                 while (editPress) {
@@ -121,7 +121,7 @@ public class GameOfLife {
                 //is set the amount of times that the user specifies with round time, the sleep is only executed if 
                 //pause is false, this is so that if pause becomes true, it stops and does not continue sleeping
                 for (timeCounter = 0; timeCounter < roundTime; timeCounter++) {
-                    if (pause == false) {
+                    if (!pause) {
                         try {
                             Thread.sleep(1);
                         } catch (InterruptedException ex) {
@@ -130,7 +130,7 @@ public class GameOfLife {
                     }
                 }
                 //method InnerGameLogic is initialized only if pause is false and the main game frame is showing
-                if (pause == false && frame.isShowing()) {
+                if (!pause && frame.isShowing()) {
                     InnerGameLogic();
                 }
                 //saving the game by sending to method Save
@@ -305,7 +305,7 @@ public class GameOfLife {
                     tempCells[vertical][horizontal] = false;
                     //if the cells at the position is dead but has 3 neighbours, 
                     //it becomes alive but is temporairly stored on tempCells
-                } else if (cells[vertical][horizontal] == false && temp == 3) {
+                } else if (!cells[vertical][horizontal] && temp == 3) {
                     tempCells[vertical][horizontal] = true;
                     //if the cells at the position is alive and has 2 or 3 neighbours, 
                     //it stays alive, and is temporairly stored on tempCells
@@ -330,10 +330,10 @@ public class GameOfLife {
         for (int vertical = 0; vertical <= maxVertical; vertical++) {
             for (int horizontal = 0; horizontal <= maxHorizontal; horizontal++) {
                 //display wether the cell is alive or dead
-                if (cells[vertical][horizontal] == false) {
-                    lifeBoard += "□ ";
-                } else if (cells[vertical][horizontal]) {
+                if (cells[vertical][horizontal]) {
                     lifeBoard += "■ ";
+                } else {
+                    lifeBoard += "□ ";
                 }
             }
             //skip a line every time a full horizontal row is displayed
@@ -346,7 +346,7 @@ public class GameOfLife {
     //declaring private void method for setting GUI and action listeners
     private void PrepareGUI() {
         //setting the frame title
-        if (pause == false) {
+        if (!pause) {
             frame = new JFrame("Game Of Life");
         } else {
             frame = new JFrame("Game Of Life (Paused)");
@@ -475,7 +475,7 @@ public class GameOfLife {
                 }
             } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
                     || tempSize.length() > 9 || parseInt(tempSize, 10) > 100);
-            if (skip == false) {
+            if (!skip) {
                 //randomSpawning variable is set
                 randomSpawning = parseInt(tempSize, 10);
                 //sending to the method RandomSpawns
@@ -512,7 +512,7 @@ public class GameOfLife {
             //sending to the method Save
             Save();
             //setting the title of the frame if it is not paused
-            if (tempPause == false) {
+            if (!tempPause) {
                 frame.setTitle("Game Of Life");
             }
             //sets pause back to the original setting
@@ -624,7 +624,7 @@ public class GameOfLife {
     //declaring private void method used for filling in the array and changing the label
     private void FillingAndChangingArray() {
         //making sure the label is currently not being changed
-        if (changingLabel == false) {
+        if (!changingLabel) {
             //sending to method FillInArray
             FillInArray();
             //set label from variable lifeBoard
@@ -690,7 +690,7 @@ public class GameOfLife {
     private void Save() {
         //saveFile is created using the four main variables, seperated by spaces
         saveFile = maxVertical + " " + maxHorizontal + " " + roundTime;
-        if (pause == false) {
+        if (!pause) {
             saveFile += " 0";
         } else {
             saveFile += " 1";
@@ -698,7 +698,7 @@ public class GameOfLife {
         //saving the 2d array to file
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             for (int horizontal = 0; horizontal < maxHorizontal + 1; horizontal++) {
-                if (cells[vertical][horizontal] == false) {
+                if (!cells[vertical][horizontal]) {
                     saveFile += " 0";
                 } else {
                     saveFile += " 1";
