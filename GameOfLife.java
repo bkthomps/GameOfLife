@@ -1,8 +1,8 @@
 /**
  ***********************************************************************************************************************
  * Bailey Thompson
- * Game Of Life (1.1.1)
- * 27 November 2016
+ * Game Of Life (1.1.2)
+ * 2 December 2016
  * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
  * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
  * Game Rules: Any live cell with more than three live neighbours dies, as if by over-population.
@@ -108,7 +108,7 @@ public class GameOfLife {
             if (pause == false) {
                 //preventing automatic editing of label if it is being changed from a mouse click; 
                 //until editPress is set to false again, the code is basically paused
-                while (editPress == true) {
+                while (editPress) {
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException ex) {
@@ -130,7 +130,7 @@ public class GameOfLife {
                     }
                 }
                 //method InnerGameLogic is initialized only if pause is false and the main game frame is showing
-                if (pause == false && frame.isShowing() == true) {
+                if (pause == false && frame.isShowing()) {
                     InnerGameLogic();
                 }
                 //saving the game by sending to method Save
@@ -154,154 +154,154 @@ public class GameOfLife {
                 //checks all 8 neighbours if it is not a side or corner cell
                 if (vertical - 1 >= 0 && horizontal - 1 >= 0 && vertical + 1 <= maxVertical
                         && horizontal + 1 <= maxHorizontal) {
-                    if (cells[vertical - 1][horizontal - 1] == true) {
+                    if (cells[vertical - 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal] == true) {
+                    if (cells[vertical - 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal + 1] == true) {
+                    if (cells[vertical - 1][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal - 1] == true) {
+                    if (cells[vertical][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal + 1] == true) {
+                    if (cells[vertical][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal - 1] == true) {
+                    if (cells[vertical + 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal] == true) {
+                    if (cells[vertical + 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal + 1] == true) {
+                    if (cells[vertical + 1][horizontal + 1]) {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
                 } else if (vertical - 1 < 0 && vertical + 1 <= maxVertical && horizontal - 1 >= 0
                         && horizontal + 1 <= maxHorizontal) {
-                    if (cells[vertical][horizontal - 1] == true) {
+                    if (cells[vertical][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal + 1] == true) {
+                    if (cells[vertical][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal - 1] == true) {
+                    if (cells[vertical + 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal] == true) {
+                    if (cells[vertical + 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal + 1] == true) {
+                    if (cells[vertical + 1][horizontal + 1]) {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
                 } else if (vertical + 1 > maxVertical && vertical - 1 >= 0 && horizontal - 1 >= 0
                         && horizontal + 1 <= maxHorizontal) {
-                    if (cells[vertical - 1][horizontal - 1] == true) {
+                    if (cells[vertical - 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal] == true) {
+                    if (cells[vertical - 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal + 1] == true) {
+                    if (cells[vertical - 1][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal - 1] == true) {
+                    if (cells[vertical][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal + 1] == true) {
+                    if (cells[vertical][horizontal + 1]) {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
                 } else if (horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal && vertical - 1 >= 0
                         && vertical + 1 <= maxVertical) {
-                    if (cells[vertical - 1][horizontal] == true) {
+                    if (cells[vertical - 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal + 1] == true) {
+                    if (cells[vertical - 1][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal + 1] == true) {
+                    if (cells[vertical][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal] == true) {
+                    if (cells[vertical + 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal + 1] == true) {
+                    if (cells[vertical + 1][horizontal + 1]) {
                         temp += 1;
                     }
                     //checks 5 neighbours if it is a side cell
                 } else if (horizontal + 1 > maxHorizontal && horizontal - 1 >= 0 && vertical - 1 >= 0
                         && vertical + 1 <= maxVertical) {
-                    if (cells[vertical - 1][horizontal - 1] == true) {
+                    if (cells[vertical - 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal] == true) {
+                    if (cells[vertical - 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal - 1] == true) {
+                    if (cells[vertical][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal - 1] == true) {
+                    if (cells[vertical + 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal] == true) {
+                    if (cells[vertical + 1][horizontal]) {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
                 } else if (vertical - 1 < 0 && horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal
                         && vertical + 1 <= maxVertical) {
-                    if (cells[vertical][horizontal + 1] == true) {
+                    if (cells[vertical][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal] == true) {
+                    if (cells[vertical + 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal + 1] == true) {
+                    if (cells[vertical + 1][horizontal + 1]) {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
                 } else if (vertical - 1 < 0 && horizontal + 1 > maxHorizontal && horizontal - 1 >= 0
                         && vertical + 1 <= maxVertical) {
-                    if (cells[vertical][horizontal - 1] == true) {
+                    if (cells[vertical][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal - 1] == true) {
+                    if (cells[vertical + 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical + 1][horizontal] == true) {
+                    if (cells[vertical + 1][horizontal]) {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
                 } else if (vertical + 1 > maxVertical && horizontal - 1 < 0 && horizontal + 1 <= maxHorizontal
                         && vertical - 1 >= 0) {
-                    if (cells[vertical - 1][horizontal] == true) {
+                    if (cells[vertical - 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal + 1] == true) {
+                    if (cells[vertical - 1][horizontal + 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal + 1] == true) {
+                    if (cells[vertical][horizontal + 1]) {
                         temp += 1;
                     }
                     //checks 3 neighbours if it is a corner cell
                 } else if (vertical + 1 > maxVertical && horizontal + 1 > maxHorizontal && horizontal - 1 >= 0
                         && vertical - 1 >= 0) {
-                    if (cells[vertical - 1][horizontal - 1] == true) {
+                    if (cells[vertical - 1][horizontal - 1]) {
                         temp += 1;
                     }
-                    if (cells[vertical - 1][horizontal] == true) {
+                    if (cells[vertical - 1][horizontal]) {
                         temp += 1;
                     }
-                    if (cells[vertical][horizontal - 1] == true) {
+                    if (cells[vertical][horizontal - 1]) {
                         temp += 1;
                     }
                 }
                 //if the cells at the position is alive and has more than 3 neighbours or less than 2, 
                 //it dies but is temporairly stored on tempCells
-                if (cells[vertical][horizontal] == true && (temp < 2 || temp > 3)) {
+                if (cells[vertical][horizontal] && (temp < 2 || temp > 3)) {
                     tempCells[vertical][horizontal] = false;
                     //if the cells at the position is dead but has 3 neighbours, 
                     //it becomes alive but is temporairly stored on tempCells
@@ -309,7 +309,7 @@ public class GameOfLife {
                     tempCells[vertical][horizontal] = true;
                     //if the cells at the position is alive and has 2 or 3 neighbours, 
                     //it stays alive, and is temporairly stored on tempCells
-                } else if (cells[vertical][horizontal] == true && (temp == 2 || temp == 3)) {
+                } else if (cells[vertical][horizontal] && (temp == 2 || temp == 3)) {
                     tempCells[vertical][horizontal] = true;
                 }
             }
@@ -332,7 +332,7 @@ public class GameOfLife {
                 //display wether the cell is alive or dead
                 if (cells[vertical][horizontal] == false) {
                     lifeBoard += "□ ";
-                } else if (cells[vertical][horizontal] == true) {
+                } else if (cells[vertical][horizontal]) {
                     lifeBoard += "■ ";
                 }
             }
