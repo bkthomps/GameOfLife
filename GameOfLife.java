@@ -1,8 +1,8 @@
 /**
  ***********************************************************************************************************************
  * Bailey Thompson
- * Game Of Life (1.1.3)
- * 2 December 2016
+ * Game Of Life (1.1.4)
+ * 22 December 2016
  * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
  * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
  * Game Rules: Any live cell with more than three live neighbours dies, as if by over-population.
@@ -20,10 +20,8 @@
  * Features: unless amount of rows or columns in being changed
  ***********************************************************************************************************************
  */
-//declaring package
 package gameoflife;
 
-//declaring imports
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -53,38 +51,28 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-//declaring class
 public class GameOfLife {
 
-    //declaring name of path file
-    Path file = Paths.get("GameOfLife.txt");
-    //declaring various variables for GUI
+    private static final Path FILE = Paths.get("GameOfLife.txt");
     private JFrame frame;
     private JPanel middlePanel, bottomPanel;
     private JLabel label;
     private JButton btnPause, btnPlay, btnRandom, btnClear, btnTime, btnColumn, btnRow, btnExit;
-    //variables used for game logic
-    String lifeBoard, tempSize = "", saveFile;
-    String[] split;
-    boolean pause, editPress, changingLabel;
-    boolean[][] cells, tempCells;
-    int maxVertical, maxHorizontal, screenWidth, screenHeight, roundTime, randomSpawning, timeCounter;
+    private boolean pause, editPress, changingLabel;
+    private boolean[][] cells, tempCells;
+    private int maxVertical, maxHorizontal, screenWidth, screenHeight, roundTime, randomSpawning, timeCounter;
+    private String lifeBoard, tempSize = "", saveFile;
+    private String[] split;
 
-    //declaring main method
     public static void main(String[] args) {
-        //sending to GameOfLife method
         GameOfLife GameOfLife = new GameOfLife();
         GameOfLife.GameOfLife();
     }
 
-    //declaring private void method for the game setup and game logic
     private void GameOfLife() {
-        //checking the monitor dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        //setting the maximum screen higth to the dimensions minus a little bit
         screenWidth = (int) screenSize.getWidth() - 100;
         screenHeight = (int) screenSize.getHeight() - 100;
-        //if the monitor cannot display the minimum amount of columns and rows for the game to run, the user is notified
         if (((screenWidth - 10) / 14 - 1) < 25 || ((screenHeight - 70) / 16 - 1) < 25) {
             String[] buttonGameMode = {"Ok"};
             JOptionPane.showOptionDialog(null, "Sorry, your screen size is too small for this program to run.",
@@ -92,19 +80,13 @@ public class GameOfLife {
                     buttonGameMode[0]);
             System.exit(0);
         }
-        //method Load is initialized
-        Load();
-        //the size of the cells and tempCells is set
+        load();
         cells = new boolean[maxVertical + 1][maxHorizontal + 1];
         tempCells = new boolean[maxVertical + 1][maxHorizontal + 1];
-        //method FillInSave is initialized
-        FillInLoad();
-        //method FillInArray is initialized
-        FillInArray();
-        //method PrepareGUI is initialized
-        PrepareGUI();
+        fillInload();
+        fillInArray();
+        prepareGUI();
         while (1 != 0) {
-            //checking if pause is false
             if (!pause) {
                 //preventing automatic editing of label if it is being changed from a mouse click; 
                 //until editPress is set to false again, the code is basically paused
@@ -115,8 +97,8 @@ public class GameOfLife {
                         Logger.getLogger(GameOfLife.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                //sending to method FillingAndChangingArray
-                FillingAndChangingArray();
+                //sending to method fillingAndChangingArray
+                fillingAndChangingArray();
                 //instead of using the sleep amount for the round time that the user enters, a 1 milisecond sleep thread
                 //is set the amount of times that the user specifies with round time, the sleep is only executed if 
                 //pause is false, this is so that if pause becomes true, it stops and does not continue sleeping
@@ -129,27 +111,22 @@ public class GameOfLife {
                         }
                     }
                 }
-                //method InnerGameLogic is initialized only if pause is false and the main game frame is showing
                 if (!pause && frame.isShowing()) {
-                    InnerGameLogic();
+                    innerGameLogic();
                 }
-                //saving the game by sending to method Save
-                Save();
+                save();
                 //the button btnPlay listens only if pause is true, and sets pause to false if it is clicked
             } else {
                 btnPlay.addActionListener((ActionEvent e) -> {
-                    //just here to re-initialized the btnplay listener in the method PrepareGUI
+                    //just here to re-initialized the btnplay listener in the method prepareGUI
                 });
             }
         }
     }
 
-    //declaring private void method for the game logic
-    private void InnerGameLogic() {
-        //executes a loop in a loop to fill the 2d array
+    private void innerGameLogic() {
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             for (int horizontal = 0; horizontal < maxHorizontal + 1; horizontal++) {
-                //sets the temp number to 0
                 int temp = 0;
                 //checks all 8 neighbours if it is not a side or corner cell
                 if (vertical - 1 >= 0 && horizontal - 1 >= 0 && vertical + 1 <= maxVertical
@@ -314,26 +291,21 @@ public class GameOfLife {
                 }
             }
         }
-        //after the whole 2d array is set onto the tempCells, the tempCells is writen onto the cells
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             System.arraycopy(tempCells[vertical], 0, cells[vertical], 0, maxHorizontal + 1);
         }
     }
 
-    //declaring private void method for filling in the 2d array
-    private void FillInArray() {
-        //setting changingLabel to true
+    private void fillInArray() {
         changingLabel = true;
-        //sets the font size of the display
         lifeBoard = "<html><span style='font-size:1em'>";
-        //loop in a loop to set every cell
         for (int vertical = 0; vertical <= maxVertical; vertical++) {
             for (int horizontal = 0; horizontal <= maxHorizontal; horizontal++) {
                 //display wether the cell is alive or dead
-                if (cells[vertical][horizontal]) {
-                    lifeBoard += "■ ";
-                } else {
+                if (!cells[vertical][horizontal]) {
                     lifeBoard += "□ ";
+                } else if (cells[vertical][horizontal]) {
+                    lifeBoard += "■ ";
                 }
             }
             //skip a line every time a full horizontal row is displayed
@@ -343,29 +315,20 @@ public class GameOfLife {
         changingLabel = false;
     }
 
-    //declaring private void method for setting GUI and action listeners
-    private void PrepareGUI() {
-        //setting the frame title
+    private void prepareGUI() {
         if (!pause) {
             frame = new JFrame("Game Of Life");
         } else {
             frame = new JFrame("Game Of Life (Paused)");
         }
-        //setting the frame layout
         frame.setLayout(new BorderLayout());
-        //setting the frame size
         frame.setSize(14 * (maxHorizontal + 1) + 5, 16 * (maxVertical + 1) + 95);
-        //making the frame non-resizable
         frame.setResizable(false);
 
-        //creating a label with text as lifeBoard variable
         label = new JLabel(lifeBoard, JLabel.CENTER);
-        //setting the first row of buttons
         middlePanel = new JPanel();
-        //setting the second row of buttons
         bottomPanel = new JPanel();
 
-        //setting buttons and what is displayed on them
         btnPause = new JButton("Pause");
         btnPlay = new JButton("Play");
         btnRandom = new JButton("Random");
@@ -375,35 +338,27 @@ public class GameOfLife {
         btnRow = new JButton("Row");
         btnExit = new JButton("Exit");
 
-        //setting the layout of both rows of buttons
         middlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        //setting upper row of buttons to variable middlePanel
         middlePanel.add(btnPause);
         middlePanel.add(btnPlay);
         middlePanel.add(btnRandom);
         middlePanel.add(btnClear);
 
-        //setting upper row of buttons to variable bottomPanel
         bottomPanel.add(btnTime);
         bottomPanel.add(btnColumn);
         bottomPanel.add(btnRow);
         bottomPanel.add(btnExit);
 
-        //setting various parts of the frame
         frame.add(label, BorderLayout.NORTH);
         frame.add(middlePanel, BorderLayout.CENTER);
         frame.add(bottomPanel, BorderLayout.SOUTH);
 
-        //setting the frame to display in the middle of the monitor
         frame.setLocationRelativeTo(null);
-        //setting the frame to close when the x button is pressed
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //setting the frame to visible
         frame.setVisible(true);
 
-        //setting what happens when user clicks on the label of the frame
         label.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -419,15 +374,11 @@ public class GameOfLife {
                     cells[verticalClickPosition][horizontalClickPosition] ^= true;
                     tempCells[verticalClickPosition][horizontalClickPosition] ^= true;
                 }
-                //sending to method FillingAndChangingArray
-                FillingAndChangingArray();
-                //enableing label editing
+                fillingAndChangingArray();
                 editPress = false;
-                //sending to method Save
-                Save();
+                save();
             }
 
-            //the next four mouse events are not used for anything, but must be included
             @Override
             public void mousePressed(MouseEvent e) {
                 //useless
@@ -448,23 +399,19 @@ public class GameOfLife {
                 //useless
             }
         });
-        //setting what happens when user clicks on pause button
+
         btnPause.addActionListener((ActionEvent e) -> {
-            //sets pause to true
             pause = true;
-            //resets the title of the frame so it says paused
             frame.setTitle("Game Of Life (Paused)");
         });
+
         btnPlay.addActionListener((ActionEvent e) -> {
-            //setting pause to false
             pause = false;
-            //setting the title of the frame
             frame.setTitle("Game Of Life");
         });
-        //setting what happens when user clicks on random button
+
         btnRandom.addActionListener((ActionEvent e) -> {
             boolean skip = false;
-            //the loop is executed and re-executed until conditions are met
             do {
                 tempSize = JOptionPane.showInputDialog(null, "How much of the time out of 100 should a cell spawn "
                         + "alive, as an integer value?", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
@@ -476,74 +423,55 @@ public class GameOfLife {
             } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
                     || tempSize.length() > 9 || parseInt(tempSize, 10) > 100);
             if (!skip) {
-                //randomSpawning variable is set
                 randomSpawning = parseInt(tempSize, 10);
-                //sending to the method RandomSpawns
-                RandomSpawns();
+                randomSpawns();
             }
         });
-        //setting what happens when user clicks on clear button
+
         btnClear.addActionListener((ActionEvent e) -> {
-            //setting randomSpawning to 0 so that the board clears
             randomSpawning = 0;
-            //sending to the method RandomSpawns
-            RandomSpawns();
+            randomSpawns();
         });
-        //setting what happens when user clicks on time button
+
         btnTime.addActionListener((ActionEvent e) -> {
-            //sets tempPause to what pause is set to
             boolean tempPause = pause;
-            //sets pause to true
             pause = true;
-            //resets the title of the frame so it says paused
             frame.setTitle("Game Of Life (Paused)");
-            //the loop is executed and re-executed until conditions are met
             do {
                 tempSize = JOptionPane.showInputDialog(null, "Please insert the amount of miliseconds\nper turn as an "
                         + "integer value.\n1000 miliseconds = 1 second.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
-                //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
                     tempSize = String.valueOf(roundTime);
                 }
             } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
                     || tempSize.length() > 9 || parseInt(tempSize, 10) == 0);
-            //roundTime variable is set
             roundTime = parseInt(tempSize, 10);
-            //sending to the method Save
-            Save();
-            //setting the title of the frame if it is not paused
+            save();
             if (!tempPause) {
                 frame.setTitle("Game Of Life");
             }
             //sets pause back to the original setting
             pause = tempPause;
         });
-        //setting what happens when user clicks on column button
+
         btnColumn.addActionListener((ActionEvent e) -> {
-            //the frame is set to invisible
             frame.setVisible(false);
-            //the loop is executed and re-executed until conditions are met
             do {
                 tempSize = JOptionPane.showInputDialog(null, "Please insert the column size as an integer value.\nMust "
                         + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
                         JOptionPane.PLAIN_MESSAGE);
-                //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
                     tempSize = String.valueOf(maxVertical + 1);
                 }
             } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
                     || tempSize.length() > 9 || parseInt(tempSize, 10) < 25
                     || parseInt(tempSize, 10) > (screenHeight - 95) / 16 - 1);
-            //maxVertical variable is set
             maxVertical = parseInt(tempSize, 10) - 1;
-            //sending to method Resize
-            Resize();
+            resize();
         });
-        //setting what happens when user clicks on row button
+
         btnRow.addActionListener((ActionEvent e) -> {
-            //the frame is set to invisible
             frame.setVisible(false);
-            //the loop is executed and re-executed until conditions are met
             do {
                 tempSize = JOptionPane.showInputDialog(null, "Please insert the row size as an integer value.\nMust "
                         + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
@@ -555,85 +483,57 @@ public class GameOfLife {
             } while ("".equals(tempSize) || !"".equals(tempSize.replaceAll("[0123456789]", ""))
                     || tempSize.length() > 9 || parseInt(tempSize, 10) < 25
                     || parseInt(tempSize, 10) > (screenWidth - 5) / 14 - 1);
-            //maxHorizontal variable is set
             maxHorizontal = parseInt(tempSize, 10) - 1;
-            //sending to method Resize
-            Resize();
+            resize();
         });
-        //setting what happens when user clicks on exit button
+
         btnExit.addActionListener((ActionEvent e) -> {
-            //exiting the program
             System.exit(0);
         });
     }
 
-    //declaring private void method for resizing both 2d arrays
-    private void Resize() {
-        //setting the size of both 2d arrays
+    private void resize() {
         cells = new boolean[maxVertical + 1][maxHorizontal + 1];
         tempCells = new boolean[maxVertical + 1][maxHorizontal + 1];
-        //sending to the method Save
-        Save();
-        //setting the size of the frame
+        save();
         frame.setSize(14 * (maxHorizontal + 1) + 5, 16 * (maxVertical + 1) + 95);
-        //sending to method FillingAndChangingArray
-        FillingAndChangingArray();
-        //making the frame visible again
+        fillingAndChangingArray();
         frame.setVisible(true);
-        //centering the frame in the middle of the monitor
         frame.setLocationRelativeTo(null);
     }
 
-    //declaring private void method for randomly spawning live cells to 2d array
-    private void RandomSpawns() {
-        //declaring variable
-        int randomRandomSpawns;
-        //loop in a loop used to fill 2d arrays
+    private void randomSpawns() {
+        int randomrandomSpawns;
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             for (int horizontal = 0; horizontal < maxHorizontal + 1; horizontal++) {
-                //only execute if randomSpawning is not 0 and user has not pressed the clear button
                 if (randomSpawning != 0) {
-                    //random number generator
-                    randomRandomSpawns = (int) (Math.random() * 100);
-                    //if the randomly generated number is greater or equal to 0 and less than the randomSpawning 
-                    //variable, both 2d arrays are set to true at that position
-                    if (randomRandomSpawns >= 0 && randomRandomSpawns < randomSpawning) {
+                    randomrandomSpawns = (int) (Math.random() * 100);
+                    if (randomrandomSpawns >= 0 && randomrandomSpawns < randomSpawning) {
                         cells[vertical][horizontal] = true;
                         tempCells[vertical][horizontal] = true;
-                        //if the randomly generated number is equal to or greater than the randomSpawning variable, 
-                        //both 2d arrays are set to false at that position
                     } else {
                         cells[vertical][horizontal] = false;
                         tempCells[vertical][horizontal] = false;
                     }
-                    //execute if randomSpawning is 0 or the user has pressed the clear button
                 } else {
                     cells[vertical][horizontal] = false;
                     tempCells[vertical][horizontal] = false;
                 }
             }
         }
-        //sending to method FillingAndChangingArray
-        FillingAndChangingArray();
-        //setting the timeCounter to 0
+        fillingAndChangingArray();
         timeCounter = 0;
-        //sending to the method Save
-        Save();
+        save();
     }
 
-    //declaring private void method used for filling in the array and changing the label
-    private void FillingAndChangingArray() {
-        //making sure the label is currently not being changed
+    private void fillingAndChangingArray() {
         if (!changingLabel) {
-            //sending to method FillInArray
-            FillInArray();
-            //set label from variable lifeBoard
+            fillInArray();
             label.setText(lifeBoard);
         }
     }
 
-    //declaring private void method used for filling in the array after loading the game settings
-    private void FillInLoad() {
+    private void fillInload() {
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             for (int horizontal = 0; horizontal < maxHorizontal + 1; horizontal++) {
                 if (parseInt(split[vertical * (maxHorizontal + 1) + horizontal + 4], 10) == 1) {
@@ -643,23 +543,20 @@ public class GameOfLife {
         }
     }
 
-    //declaring private void method used for loading from file io
-    private void Load() {
+    private void load() {
         try {
-            //trying to create file
-            Files.createFile(file);
-            //executed if file already exists
+            Files.createFile(FILE);
         } catch (FileAlreadyExistsException x) {
             //file is read from and saved to variable saveFile is file already exists
-            try (InputStream in = Files.newInputStream(file);
+            try (InputStream in = Files.newInputStream(FILE);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
+                String line = reader.readLine();
+                while (line != null) {
                     //content of file is saved to saveFile
                     saveFile = line;
                 }
-            } catch (IOException y) {
-                System.err.println(y);
+            } catch (IOException e) {
+                System.err.println(e);
             }
         } catch (IOException x) {
             System.err.println(x);
@@ -686,8 +583,7 @@ public class GameOfLife {
         }
     }
 
-    //declaring private void method used for saving with file io
-    private void Save() {
+    private void save() {
         //saveFile is created using the four main variables, seperated by spaces
         saveFile = maxVertical + " " + maxHorizontal + " " + roundTime;
         if (!pause) {
@@ -709,7 +605,7 @@ public class GameOfLife {
         byte data[] = saveFile.getBytes();
         //byte data is saved to file using file io
         try (OutputStream out = new BufferedOutputStream(
-                Files.newOutputStream(file, WRITE, TRUNCATE_EXISTING))) {
+                Files.newOutputStream(FILE, WRITE, TRUNCATE_EXISTING))) {
             out.write(data, 0, data.length);
         } catch (IOException x) {
             System.err.println(x);
