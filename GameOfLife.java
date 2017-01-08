@@ -1,8 +1,7 @@
 /**
- ***********************************************************************************************************************
  * Bailey Thompson
- * Game Of Life (1.1.4)
- * 22 December 2016
+ * Game Of Life (1.1.5)
+ * 8 January 2017
  * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
  * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
  * Game Rules: Any live cell with more than three live neighbours dies, as if by over-population.
@@ -18,7 +17,6 @@
  * Features: that  the  user  previously put. All user preferences are saved with file IO so that the next time the user
  * Features: opens  the game, previous settings are used. The main game frame cannot be resized by sketching the screen,
  * Features: unless amount of rows or columns in being changed
- ***********************************************************************************************************************
  */
 package gameoflife;
 
