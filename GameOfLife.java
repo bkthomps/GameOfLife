@@ -1,7 +1,7 @@
 /**
  * Bailey Thompson
- * Game Of Life (1.1.5)
- * 8 January 2017
+ * Game Of Life (1.1.6)
+ * 14 January 2017
  * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
  * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
  * Game Rules: Any live cell with more than three live neighbours dies, as if by over-population.
@@ -548,9 +548,8 @@ public class GameOfLife {
             //file is read from and saved to variable saveFile is file already exists
             try (InputStream in = Files.newInputStream(FILE);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-                String line = reader.readLine();
-                while (line != null) {
-                    //content of file is saved to saveFile
+                String line;
+                while ((line = reader.readLine()) != null) {
                     saveFile = line;
                 }
             } catch (IOException e) {
