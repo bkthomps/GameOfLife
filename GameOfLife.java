@@ -1,24 +1,22 @@
-/**
+/*
  * Bailey Thompson
- * Game Of Life (1.1.6)
- * 14 January 2017
- * Game Rules: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
- * Game Rules: Any live cell with two or three live neighbours lives on to the next generation.
- * Game Rules: Any live cell with more than three live neighbours dies, as if by over-population.
- * Game Rules: Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
- * Features: User  has  the  ability  to  pause and resume the game at any time. At any time, user can click on the game
- * Features: board, and the cell will become the opposite of what it currently is. If it was dead, it will become alive,
- * Features: if  it  was  alive,  it  will  become dead. Change in cell state will have an effect on game logic like any
- * Features: normal  cell  would.  User has the ability to clear the game board at any time, making all cells dead. User
- * Features: has  the  ability  to  randomize  the amount of live cells, portion of live cells that should appear on the
- * Features: board.  User has the ability to change the amount of time between turns, having an immediate effect on game
- * Features: logic.  User also has the ability to change row size and column size at any time. If a selection pane other
- * Features: than  the  main  game is closed, the pane acts as if the user did not enter anything, by entering the value
- * Features: that  the  user  previously put. All user preferences are saved with file IO so that the next time the user
- * Features: opens  the game, previous settings are used. The main game frame cannot be resized by sketching the screen,
- * Features: unless amount of rows or columns in being changed
+ * Game Of Life (1.2.0)
+ * 6 February 2017
+ * Rule: Any live cell with fewer than two live neighbours dies, as if caused by under-population.
+ * Rule: Any live cell with two or three live neighbours lives on to the next generation.
+ * Rule: Any live cell with more than three live neighbours dies, as if by over-population.
+ * Rule: Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+ * User has the ability to pause and resume the game at any time. At any time, user can click on the game board, and the
+ * cell will become the opposite of what it currently is. If it was dead, it will become alive, if it was alive, it will
+ * become dead. Change in cell state will have an effect on game logic like any normal cell would. User has the ability
+ * to clear the game board at any time, making all cells dead. User has the ability to randomize the amount of live
+ * cells, portion of live cells that should appear on the board. User has the ability to change the amount of time
+ * between turns, having an immediate effect on game logic. User also has the ability to change row size and column size
+ * at any time. If a selection pane other than the main game is closed, the pane acts as if the user did not enter
+ * anything, by entering the value that the user previously put. All user preferences are saved with file IO so that the
+ * next time the user opens the game, previous settings are used. The main game frame cannot be resized by sketching the
+ * screen, unless amount of rows or columns in being changed
  */
-package gameoflife;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -49,13 +47,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class GameOfLife {
+class GameOfLife {
 
-    private static final Path FILE = Paths.get("GameOfLife.txt");
+    private static final Path FILE = Paths.get("gameOfLifeLogic.txt");
     private JFrame frame;
-    private JPanel middlePanel, bottomPanel;
     private JLabel label;
-    private JButton btnPause, btnPlay, btnRandom, btnClear, btnTime, btnColumn, btnRow, btnExit;
+    private JButton btnPlay;
     private boolean pause, editPress, changingLabel;
     private boolean[][] cells, tempCells;
     private int maxVertical, maxHorizontal, screenWidth, screenHeight, roundTime, randomSpawning, timeCounter;
@@ -63,11 +60,11 @@ public class GameOfLife {
     private String[] split;
 
     public static void main(String[] args) {
-        GameOfLife GameOfLife = new GameOfLife();
-        GameOfLife.GameOfLife();
+        GameOfLife gameOfLife = new GameOfLife();
+        gameOfLife.gameOfLifeLogic();
     }
 
-    private void GameOfLife() {
+    private void gameOfLifeLogic() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenWidth = (int) screenSize.getWidth() - 100;
         screenHeight = (int) screenSize.getHeight() - 100;
@@ -81,12 +78,12 @@ public class GameOfLife {
         load();
         cells = new boolean[maxVertical + 1][maxHorizontal + 1];
         tempCells = new boolean[maxVertical + 1][maxHorizontal + 1];
-        fillInload();
+        fillInLoad();
         fillInArray();
         prepareGUI();
-        while (1 != 0) {
+        while (true) {
             if (!pause) {
-                //preventing automatic editing of label if it is being changed from a mouse click; 
+                //preventing automatic editing of label if it is being changed from a mouse click;
                 //until editPress is set to false again, the code is basically paused
                 while (editPress) {
                     try {
@@ -97,9 +94,9 @@ public class GameOfLife {
                 }
                 //sending to method fillingAndChangingArray
                 fillingAndChangingArray();
-                //instead of using the sleep amount for the round time that the user enters, a 1 milisecond sleep thread
-                //is set the amount of times that the user specifies with round time, the sleep is only executed if 
-                //pause is false, this is so that if pause becomes true, it stops and does not continue sleeping
+                //instead of using the sleep amount for the round time that the user enters, a 1 milli-second sleep
+                //thread is set the amount of times that the user specifies with round time, the sleep is only executed
+                //if pause is false, this is so that if pause becomes true, it stops and does not continue sleeping
                 for (timeCounter = 0; timeCounter < roundTime; timeCounter++) {
                     if (!pause) {
                         try {
@@ -116,7 +113,7 @@ public class GameOfLife {
                 //the button btnPlay listens only if pause is true, and sets pause to false if it is clicked
             } else {
                 btnPlay.addActionListener((ActionEvent e) -> {
-                    //just here to re-initialized the btnplay listener in the method prepareGUI
+                    //just here to re-initialized the btnPlay listener in the method prepareGUI
                 });
             }
         }
@@ -274,16 +271,16 @@ public class GameOfLife {
                         temp += 1;
                     }
                 }
-                //if the cells at the position is alive and has more than 3 neighbours or less than 2, 
-                //it dies but is temporairly stored on tempCells
+                //if the cells at the position is alive and has more than 3 neighbours or less than 2,
+                //it dies but is temporarily stored on tempCells
                 if (cells[vertical][horizontal] && (temp < 2 || temp > 3)) {
                     tempCells[vertical][horizontal] = false;
-                    //if the cells at the position is dead but has 3 neighbours, 
-                    //it becomes alive but is temporairly stored on tempCells
+                    //if the cells at the position is dead but has 3 neighbours,
+                    //it becomes alive but is temporarily stored on tempCells
                 } else if (!cells[vertical][horizontal] && temp == 3) {
                     tempCells[vertical][horizontal] = true;
-                    //if the cells at the position is alive and has 2 or 3 neighbours, 
-                    //it stays alive, and is temporairly stored on tempCells
+                    //if the cells at the position is alive and has 2 or 3 neighbours,
+                    //it stays alive, and is temporarily stored on tempCells
                 } else if (cells[vertical][horizontal] && (temp == 2 || temp == 3)) {
                     tempCells[vertical][horizontal] = true;
                 }
@@ -299,7 +296,7 @@ public class GameOfLife {
         lifeBoard = "<html><span style='font-size:1em'>";
         for (int vertical = 0; vertical <= maxVertical; vertical++) {
             for (int horizontal = 0; horizontal <= maxHorizontal; horizontal++) {
-                //display wether the cell is alive or dead
+                //display whether the cell is alive or dead
                 if (!cells[vertical][horizontal]) {
                     lifeBoard += "□ ";
                 } else if (cells[vertical][horizontal]) {
@@ -324,17 +321,17 @@ public class GameOfLife {
         frame.setResizable(false);
 
         label = new JLabel(lifeBoard, JLabel.CENTER);
-        middlePanel = new JPanel();
-        bottomPanel = new JPanel();
+        JPanel middlePanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
 
-        btnPause = new JButton("Pause");
+        JButton btnPause = new JButton("Pause");
         btnPlay = new JButton("Play");
-        btnRandom = new JButton("Random");
-        btnClear = new JButton("Clear");
-        btnTime = new JButton("Time");
-        btnColumn = new JButton("Column");
-        btnRow = new JButton("Row");
-        btnExit = new JButton("Exit");
+        JButton btnRandom = new JButton("Random");
+        JButton btnClear = new JButton("Clear");
+        JButton btnTime = new JButton("Time");
+        JButton btnColumn = new JButton("Column");
+        JButton btnRow = new JButton("Row");
+        JButton btnExit = new JButton("Exit");
 
         middlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -436,8 +433,8 @@ public class GameOfLife {
             pause = true;
             frame.setTitle("Game Of Life (Paused)");
             do {
-                tempSize = JOptionPane.showInputDialog(null, "Please insert the amount of miliseconds\nper turn as an "
-                        + "integer value.\n1000 miliseconds = 1 second.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
+                tempSize = JOptionPane.showInputDialog(null, "Please insert the amount of milli-seconds\nper turn as an"
+                        + " integer value.\n1000 milli-seconds = 1 second.", "Game Of Life", JOptionPane.PLAIN_MESSAGE);
                 if (tempSize == null) {
                     tempSize = String.valueOf(roundTime);
                 }
@@ -456,7 +453,7 @@ public class GameOfLife {
             frame.setVisible(false);
             do {
                 tempSize = JOptionPane.showInputDialog(null, "Please insert the column size as an integer value.\nMust "
-                        + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
+                                + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
                         JOptionPane.PLAIN_MESSAGE);
                 if (tempSize == null) {
                     tempSize = String.valueOf(maxVertical + 1);
@@ -472,7 +469,7 @@ public class GameOfLife {
             frame.setVisible(false);
             do {
                 tempSize = JOptionPane.showInputDialog(null, "Please insert the row size as an integer value.\nMust "
-                        + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
+                                + "be between 25 and maximum size allowed on your monitor.", "Game Of Life",
                         JOptionPane.PLAIN_MESSAGE);
                 //if user pressed cancel or the x button, the previous value is used
                 if (tempSize == null) {
@@ -485,9 +482,7 @@ public class GameOfLife {
             resize();
         });
 
-        btnExit.addActionListener((ActionEvent e) -> {
-            System.exit(0);
-        });
+        btnExit.addActionListener((ActionEvent e) -> System.exit(0));
     }
 
     private void resize() {
@@ -501,12 +496,12 @@ public class GameOfLife {
     }
 
     private void randomSpawns() {
-        int randomrandomSpawns;
+        int randomSpawns;
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             for (int horizontal = 0; horizontal < maxHorizontal + 1; horizontal++) {
                 if (randomSpawning != 0) {
-                    randomrandomSpawns = (int) (Math.random() * 100);
-                    if (randomrandomSpawns >= 0 && randomrandomSpawns < randomSpawning) {
+                    randomSpawns = (int) (Math.random() * 100);
+                    if (randomSpawns >= 0 && randomSpawns < randomSpawning) {
                         cells[vertical][horizontal] = true;
                         tempCells[vertical][horizontal] = true;
                     } else {
@@ -531,7 +526,7 @@ public class GameOfLife {
         }
     }
 
-    private void fillInload() {
+    private void fillInLoad() {
         for (int vertical = 0; vertical < maxVertical + 1; vertical++) {
             for (int horizontal = 0; horizontal < maxHorizontal + 1; horizontal++) {
                 if (parseInt(split[vertical * (maxHorizontal + 1) + horizontal + 4], 10) == 1) {
@@ -547,25 +542,25 @@ public class GameOfLife {
         } catch (FileAlreadyExistsException x) {
             //file is read from and saved to variable saveFile is file already exists
             try (InputStream in = Files.newInputStream(FILE);
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     saveFile = line;
                 }
             } catch (IOException e) {
-                System.err.println(e);
+                System.err.println("Error 1 in load method");
             }
         } catch (IOException x) {
-            System.err.println(x);
+            System.err.println("Error 2 in load method");
         }
-        //if the file does not contain anything since it was just created, default variables are used for saveile
+        //if the file does not contain anything since it was just created, default variables are used for saveFile
         if (saveFile == null) {
             saveFile = "24 24 200 0";
             for (int counterFillFalse = 0; counterFillFalse < 25 * 25; counterFillFalse++) {
                 saveFile += " 0";
             }
         }
-        //a String array is created and each part of the array is saved to from saveFile seperated by spaces
+        //a String array is created and each part of the array is saved to from saveFile separated by spaces
         split = saveFile.split("\\s+");
         //variable maxVertical is the first number
         maxVertical = parseInt(split[0], 10);
@@ -581,7 +576,7 @@ public class GameOfLife {
     }
 
     private void save() {
-        //saveFile is created using the four main variables, seperated by spaces
+        //saveFile is created using the four main variables, separated by spaces
         saveFile = maxVertical + " " + maxHorizontal + " " + roundTime;
         if (!pause) {
             saveFile += " 0";
@@ -605,7 +600,7 @@ public class GameOfLife {
                 Files.newOutputStream(FILE, WRITE, TRUNCATE_EXISTING))) {
             out.write(data, 0, data.length);
         } catch (IOException x) {
-            System.err.println(x);
+            System.err.println("Error in save method");
         }
     }
 }
