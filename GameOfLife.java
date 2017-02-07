@@ -49,7 +49,7 @@ import javax.swing.WindowConstants;
 
 class GameOfLife {
 
-    private static final Path FILE = Paths.get("gameOfLifeLogic.txt");
+    private static final Path FILE = Paths.get("GameOfLife.txt");
     private JFrame frame;
     private JLabel label;
     private JButton btnPlay;
