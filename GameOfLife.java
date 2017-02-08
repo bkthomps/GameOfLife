@@ -47,7 +47,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-class GameOfLife {
+public class GameOfLife {
 
     private static final Path FILE = Paths.get("GameOfLife.txt");
     private JFrame frame;
